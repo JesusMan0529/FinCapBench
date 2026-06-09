@@ -192,7 +192,7 @@ CNFinBench 部署在基于 **OpenCompass** 构建的**全自动评估平台**上
 
 ## 📖 引用
 
-如果您使用 CNFinBench，请引用：
+如果CNFinBench对您的研究工作有所帮助，欢迎引用：
 
 ```bibtex
 @inproceedings{ding2026kdd,
@@ -202,3 +202,21 @@ CNFinBench 部署在基于 **OpenCompass** 构建的**全自动评估平台**上
   year={2026}
 }
 ```
+
+## 👥 贡献者
+
+感谢本项目的贡献者 🎉
+
+<a href="https://github.com/open-compass/CNFinBench/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=open-compass/CNFinBench" />
+</a>
+
+## ⭐ Star History
+
+<div align="center">
+
+[![Star History Chart](https://api.star-history.com/svg?repos=open-compass/CNFinBench&type=Date)](https://star-history.com/#open-compass/CNFinBench&Date)
+
+</div>
+
+---
