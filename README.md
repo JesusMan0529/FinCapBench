@@ -203,15 +203,15 @@ If you find CNFinBench helpful for your research, please consider citing our wor
 }
 ```
 
-### 👥 **Contributors**
+## 👥 Contributors
 
-**Thanks to all our amazing contributors who make this project possible! 🎉**
+Thanks to all our amazing contributors who make this project possible! 🎉
 
 <a href="https://github.com/open-compass/CNFinBench/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=open-compass/CNFinBench" />
 </a>
 
-### ⭐ **Star History**
+## ⭐ Star History
 
 <div align="center">
 
