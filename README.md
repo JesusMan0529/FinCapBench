@@ -195,12 +195,9 @@ For more detailed instructions and examples, please see the [multi-turn README](
 If you use CNFinBench, please cite:
 
 ```bibtex
-@misc{ding2025cnfinbenchbenchmarksafetycompliance,
-      title={CNFinBench: A Benchmark for Safety and Compliance of Large Language Models in Finance}, 
-      author={Jinru Ding and Chao Ding and Wenrao Pang and Boyi Xiao and Zhiqiang Liu and Pengcheng Chen and Jiayuan Chen and Tiantian Yuan and Junming Guan and Yidong Jiang and Dawei Cheng and Jie Xu},
-      year={2025},
-      eprint={2512.09506},
-      archivePrefix={arXiv},
-      primaryClass={cs.CE},
-      url={https://arxiv.org/abs/2512.09506}, 
+@inproceedings{ding2026kdd,
+  title={Beyond Knowledge to Agency: Evaluating Expertise, Autonomy, and Integrity in Finance with CNFinBench},
+  author={Ding, Jinru and Ding, Chao and Jiang, Yidong and Pang, Wenrao and Xiao, Boyi and Liu, Zhiqiang and Chen, Jiayuan and Zhong, Yun and Yuan, Tiantian and Guan, Junming and Cheng, Dawei and Xu, Jie},
+  booktitle={Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining},
+  year={2026}
 }
