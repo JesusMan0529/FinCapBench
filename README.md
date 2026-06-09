@@ -192,7 +192,7 @@ For more detailed instructions and examples, please see the [multi-turn README](
 
 ## 📖 Citation
 
-If you use CNFinBench, please cite:
+If you find CNFinBench helpful for your research, please consider citing our work:
 
 ```bibtex
 @inproceedings{ding2026kdd,
@@ -201,3 +201,22 @@ If you use CNFinBench, please cite:
   booktitle={Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining},
   year={2026}
 }
+
+
+### 👥 **Contributors**
+
+**Thanks to all our amazing contributors who make this project possible! 🎉**
+
+<a href="https://github.com/open-compass/CNFinBench/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=open-compass/CNFinBench" />
+</a>
+
+### ⭐ **Star History**
+
+<div align="center">
+
+[![Star History Chart](https://api.star-history.com/svg?repos=open-compass/CNFinBench&type=Date)](https://star-history.com/#open-compass/CNFinBench&Date)
+
+</div>
+
+---
