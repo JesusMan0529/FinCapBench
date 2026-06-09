@@ -201,7 +201,7 @@ If you find CNFinBench helpful for your research, please consider citing our wor
   booktitle={Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining},
   year={2026}
 }
-
+```
 
 ### 👥 **Contributors**
 
