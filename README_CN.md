@@ -25,8 +25,8 @@ https://github.com/user-attachments/assets/c15e95fb-8081-474b-936a-3686ac312c62
 
 
 📄 **学术发布**  
-- **Beyond Knowledge to Agency: Evaluating Expertise, Autonomy, and Integrity in Finance with CNFinBench**  
-  🔗 https://arxiv.org/abs/2512.09506
+- **Beyond Knowledge to Agency: Evaluating Expertise, Autonomy, and Integrity in Finance with CNFinBench.** In KDD 2026.
+  🔗 https://dl.acm.org/doi/10.1145/3770855.3817482
 
 🌐 **在线排行榜**  
 - 🔥 实时排行榜和模型提交：https://cnfinbench.opencompass.org.cn/home
