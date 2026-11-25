@@ -168,8 +168,6 @@ h3 { font-size: 1.13rem; }
 .local-summary { display: grid; grid-template-columns: .83fr 1.2fr; gap: clamp(24px, 5vw, 70px); align-items: center; }
 .local-summary h2 + .text-link { display: inline-block; margin-top: 12px; }
 .split { display: grid; grid-template-columns: .85fr 1.25fr; align-items: start; gap: clamp(24px, 5vw, 70px); }
-.split p { margin-top: 12px; color: var(--muted); }
-.split h2 + .text-link { display: inline-block; margin-top: 12px; }
 .copy-card { display: flex; align-items: center; gap: 12px; border: 1px solid var(--line); border-radius: 13px; background: #fff7f8; padding: 14px 16px; color: var(--wine); }
 .copy-card strong { overflow-wrap: anywhere; }
 .copy-card .icon-button { margin-left: auto; }

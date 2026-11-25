@@ -2,15 +2,7 @@
 window.BenchContent = {
   email: "1638272030@stu.xjtu.edu.cn",
   reference: "https://cnfinbench.opencompass.org.cn",
-  paper: "https://arxiv.org/abs/2512.09506",
   doi: "https://doi.org/10.1145/3770855.3817482",
-  citation: `@inproceedings{ding2026kdd,
-  title = {Beyond Knowledge to Agency: Evaluating Expertise, Autonomy, and Integrity in Finance with CNFinBench},
-  author = {Ding, Jinru and Ding, Chao and Jiang, Yidong and Pang, Wenrao and Xiao, Boyi and Liu, Zhiqiang and Chen, Jiayuan and Zhong, Yun and Yuan, Tiantian and Guan, Junming and Cheng, Dawei and Xu, Jie},
-  booktitle = {Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining},
-  year = {2026},
-  doi = {10.1145/3770855.3817482}
-}`,
   dimensions: {
     llm: [
       ["金融专业知识问答", "考察模型对金融概念、市场业务和职业规则的掌握，覆盖基础知识与专业资格考试。", ["基础知识", "资格认证"]],
