@@ -56,6 +56,7 @@
   let scrollPending = false;
   let rankingState;
   let datasetState;
+  let stopHeroMotion;
 
   function readLocal(key, fallback) {
     try {
@@ -209,11 +210,137 @@
     </div>`;
   }
 
+  function mountHeroMotion() {
+    const canvas = main.querySelector("#hero-motion");
+    const toggle = main.querySelector(".motion-toggle");
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    let width = 0;
+    let height = 0;
+    let density = 1;
+    let compact = false;
+    let visible = false;
+    let playing = !reducedMotion.matches;
+    let frame = null;
+    let lastTime = null;
+    let elapsed = 0;
+    let baseColor;
+
+    function lineX(progress) {
+      return width * (compact ? .02 + .99 * progress : .48 + .54 * progress);
+    }
+
+    function lineY(progress, lane) {
+      const phase = progress * Math.PI * 3.5 - elapsed * 1.5 + lane * .3;
+      const drift = Math.sin(phase) * (compact ? .025 : .075);
+      return height * ((compact ? .96 - .2 * progress : .92 - .61 * progress) + drift + lane * .018);
+    }
+
+    function stroke(start, end, lane) {
+      const steps = Math.ceil((end - start) * 100);
+      context.beginPath();
+      context.moveTo(lineX(start), lineY(start, lane));
+      for (let step = 1; step <= steps; step++) {
+        const progress = start + (end - start) * step / steps;
+        context.lineTo(lineX(progress), lineY(progress, lane));
+      }
+      context.stroke();
+    }
+
+    function draw() {
+      if (!width || !height) return;
+      context.clearRect(0, 0, width, height);
+      for (let lane = 0; lane < 4; lane++) {
+        context.lineWidth = 1;
+        context.strokeStyle = baseColor;
+        stroke(0, 1, lane);
+
+        const head = (elapsed * .24 + lane * .31 + .22) % 1.25 - .05;
+        const start = Math.max(0, head - .20);
+        const end = Math.min(1, head);
+        if (end <= start) continue;
+
+        const highlight = context.createLinearGradient(lineX(head - .20), 0, lineX(head), 0);
+        highlight.addColorStop(0, "rgba(255, 158, 143, 0)");
+        highlight.addColorStop(.65, "rgba(255, 189, 160, .62)");
+        highlight.addColorStop(1, "#fff2d7");
+        context.save();
+        context.strokeStyle = highlight;
+        context.lineWidth = compact ? 2 : 2.6;
+        context.lineCap = "round";
+        context.shadowColor = "#ffb39b";
+        context.shadowBlur = 12 * density;
+        stroke(start, end, lane);
+        context.restore();
+      }
+    }
+
+    function animate(now) {
+      if (lastTime !== null) elapsed += Math.min((now - lastTime) / 1000, .05);
+      lastTime = now;
+      draw();
+      frame = requestAnimationFrame(animate);
+    }
+
+    function updatePlayback() {
+      if (playing && visible && !document.hidden) {
+        if (frame === null) frame = requestAnimationFrame(animate);
+      } else if (frame !== null) {
+        cancelAnimationFrame(frame);
+        frame = null;
+        lastTime = null;
+      }
+    }
+
+    function setPlaying(next) {
+      playing = next;
+      toggle.textContent = playing ? "暂停动效" : "播放动效";
+      updatePlayback();
+    }
+
+    const resize = new ResizeObserver(([entry]) => {
+      ({ width, height } = entry.contentRect);
+      if (!width || !height) return;
+      compact = width <= 840;
+      density = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(width * density);
+      canvas.height = Math.round(height * density);
+      context.setTransform(density, 0, 0, density, 0, 0);
+      baseColor = context.createLinearGradient(lineX(0), 0, lineX(1), 0);
+      baseColor.addColorStop(0, "rgba(255, 163, 141, 0)");
+      baseColor.addColorStop(1, "rgba(255, 188, 164, .26)");
+      draw();
+    });
+    const intersection = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      updatePlayback();
+    });
+    const updatePreference = () => setPlaying(!reducedMotion.matches);
+    toggle.addEventListener("click", () => setPlaying(!playing));
+    toggle.hidden = false;
+    setPlaying(playing);
+    resize.observe(canvas);
+    intersection.observe(canvas);
+    reducedMotion.addEventListener("change", updatePreference);
+    document.addEventListener("visibilitychange", updatePlayback);
+
+    return () => {
+      setPlaying(false);
+      resize.disconnect();
+      intersection.disconnect();
+      reducedMotion.removeEventListener("change", updatePreference);
+      document.removeEventListener("visibilitychange", updatePlayback);
+    };
+  }
+
   function home() {
     const count = data.local.tasks.reduce((sum, task) => sum + task.records, 0);
     return `
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-image" aria-hidden="true"></div>
+        <canvas class="hero-motion" id="hero-motion" aria-hidden="true"></canvas>
+        <button type="button" class="button button-glass button-compact motion-toggle" aria-controls="hero-motion" hidden>暂停动效</button>
         <div class="wrap hero-inner">
           <p class="hero-kicker">金融大模型与智能体评测</p>
           <h1 id="hero-title">CNFinBench</h1>
@@ -759,6 +886,7 @@
     if (newPage) {
       const hadPage = activePage !== "";
       activePage = key;
+      stopHeroMotion?.();
       clearTimeout(arenaTimer);
       clearTimeout(toastTimer);
       toast.hidden = true;
@@ -799,6 +927,7 @@
       }
 
       main.innerHTML = view || missingPage();
+      stopHeroMotion = page === "home" ? mountHeroMotion() : undefined;
       if (isDataset) updateCatalog();
       const title = main.querySelector("h1")?.textContent;
       document.title = title && title !== "CNFinBench" ? `${title} | CNFinBench · XJTUSE` : "CNFinBench | XJTUSE";
