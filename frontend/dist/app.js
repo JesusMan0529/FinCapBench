@@ -10,6 +10,10 @@
   const toast = document.querySelector("#toast");
   const topButton = document.querySelector(".back-to-top");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const authEnabled = document.querySelector('meta[name="cnfinbench-auth"]')?.content === "enabled";
+  const authBase = authEnabled && ["https:", "http:"].includes(location.protocol) ? new URL("api/auth/", document.baseURI) : null;
+  const authOptions = { credentials: "same-origin", mode: "same-origin", cache: "no-store", redirect: "error" };
+  const repository = "https://github.com/JesusMan0529/CNFinBench";
   const labels = { llm: "大语言模型", agent: "智能体", local: "FinCapBench v1.0" };
   const navItems = [
     ["home", "首页"],
@@ -57,6 +61,8 @@
   let rankingState;
   let datasetState;
   let stopHeroMotion;
+  let studentId = null;
+  let sessionRevision = 0;
 
   function readLocal(key, fallback) {
     try {
@@ -129,6 +135,71 @@
     return isActive ? ` aria-current="${value}"` : "";
   }
 
+  function accountControl() {
+    if (!studentId) return '<button type="button" class="login-link" data-action="login">登录</button>';
+    const id = escape(studentId);
+    return `<details class="account-menu">
+      <summary class="login-link" title="${id}"><span>${id}</span> ${glyph("chevron")}</summary>
+      <div class="join-options"><button type="button" data-action="logout">退出登录</button></div>
+    </details>`;
+  }
+
+  function updateAccount(id) {
+    studentId = id;
+    header.querySelectorAll("[data-account]").forEach((slot) => {
+      slot.innerHTML = accountControl();
+    });
+  }
+
+  async function refreshSession() {
+    if (!authBase) return;
+    const revision = ++sessionRevision;
+    let id = null;
+    try {
+      const response = await fetch(new URL("session", authBase), authOptions);
+      if (response.ok) {
+        const session = await response.json();
+        if (typeof session.studentId === "string" && session.studentId.trim().length && session.studentId.length <= 64) {
+          id = session.studentId.trim();
+        }
+      }
+    } catch {
+      // A missing or unavailable session endpoint leaves the visitor signed out.
+    }
+    if (revision === sessionRevision) updateAccount(id);
+  }
+
+  function startLogin() {
+    if (authBase) {
+      const login = new URL("login", authBase);
+      login.searchParams.set("returnTo", location.hash.startsWith("#/") ? location.hash : "#/home");
+      location.assign(login);
+      return;
+    }
+    showDialog("西安交通大学统一身份认证", `
+      <p>学校尚未为本站开通统一认证。开通后，登录会跳转到学校认证页面。</p>
+      <div class="inline-actions">${external("https://nic.xjtu.edu.cn/wlfw/wlfw/tysfrzxtjr.htm", "学校认证接入说明", "button button-outline")}
+        <button class="button button-primary" type="button" data-action="close-dialog">关闭</button></div>`);
+  }
+
+  async function logout(control) {
+    if (!authBase || !studentId) return;
+    control.disabled = true;
+    ++sessionRevision;
+    try {
+      const response = await fetch(new URL("logout", authBase), { ...authOptions, method: "POST" });
+      if (!response.ok && response.status !== 401) throw new Error("Logout failed");
+      updateAccount(null);
+      const slot = [...header.querySelectorAll("[data-account]")].find((item) => item.getClientRects().length);
+      slot?.querySelector("button")?.focus();
+      announce("已退出登录");
+    } catch {
+      announce("退出登录失败，请重试");
+    } finally {
+      control.disabled = false;
+    }
+  }
+
   function mountHeader(section) {
     const activeSection = { "dataset-detail": "dataset", oldList: "evaluation-list", join: "evaluation-list" }[section] || section;
     header.innerHTML = `<div class="wrap header-inner">
@@ -140,7 +211,7 @@
         ${navItems.map(([key, label, suffix = ""]) => `
           <a href="#/${key}${suffix}"${activeLink(key === activeSection)}>${label}${key === "arena" ? '<span class="nav-framework">框架</span>' : ""}</a>`).join("")}
         ${external("https://opencompass.org.cn/", "OpenCompass", "mobile-utility")}
-        <button class="mobile-utility" type="button" data-action="login">登录</button>
+        <div class="mobile-utility" data-account>${accountControl()}</div>
       </nav>
       <div class="header-actions">
         <div class="join-menu" id="join-menu">
@@ -154,8 +225,8 @@
           </div>
         </div>
         <a href="https://opencompass.org.cn/" class="icon-button compass-link" target="_blank" rel="noopener noreferrer" aria-label="OpenCompass" title="OpenCompass">${glyph("compass")}</a>
-        <a href="https://github.com/JesusMan0529/CNFinBench" class="icon-button github-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub 仓库" title="GitHub 仓库">${glyph("github")}</a>
-        <button type="button" class="login-link" data-action="login">登录</button>
+        <a href="${repository}" class="icon-button github-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub 仓库" title="GitHub 仓库">${glyph("github")}</a>
+        <div class="header-account" data-account>${accountControl()}</div>
         <button type="button" class="icon-button menu-toggle" data-action="menu" aria-controls="navigation" aria-expanded="false" aria-label="展开导航">${glyph("menu")}</button>
       </div>
     </div>`;
@@ -182,8 +253,7 @@
         <span>XJTUSE · CNFinBench</span>
         <nav class="footer-links" aria-label="页脚导航">
           <a href="#/home/contact">联系方式</a>
-          ${refLink("/home", "CNFinBench 参考站", "")}
-          ${external("https://opencompass.org.cn/policy", "参考平台服务协议", "")}
+          ${external("https://opencompass.org.cn/policy", "平台服务协议", "")}
         </nav>
       </div>`;
   }
@@ -664,7 +734,7 @@
     const sections = {
       intro: `<p>CNFinBench 的公开评测包括大语言模型与智能体两条路线。前者关注金融知识、推理、合规和安全，后者关注执行长程任务和交付业务产物。</p>
         <p>本站同时提供交付项目 FinCapBench v1.0 的十八个能力方向与评分契约。不同基准的分数采用各自定义。</p>
-        <p>${external(content.upstream, "CNFinBench 项目")} · ${external(content.doi, "评测论文")} · ${refLink("/docs", "参考站文档")}</p>`,
+        <p>${external(repository, "CNFinBench 项目")} · ${external(content.doi, "评测论文")}</p>`,
       prompts: `<p>每个任务使用匹配其输入和输出格式的提示。需要用证据作答时，保留材料出处及相应时间范围。</p>${codeBox("doc-prompt", prompt, "文本示例")}`,
       metrics: `<p>常见指标包括准确率、F1 和基于规则或评审模型的评分。智能体任务还检查证据、工具参数和产物是否符合约定。</p>
         <p><a class="text-link" href="#/dataset/local">查看 18 项 FinCapBench 指标</a></p>`,
@@ -995,9 +1065,10 @@
         break;
       }
       case "login":
-        showDialog("登录", `<p>这是前端预览。正式登录和提交记录由参考平台提供。</p>
-          <div class="inline-actions">${refLink("/home", "前往参考平台", "button button-primary")}
-            <button class="button button-outline" type="button" data-action="close-dialog">关闭</button></div>`);
+        startLogin();
+        break;
+      case "logout":
+        logout(control);
         break;
       case "close-dialog":
         dialog.close();
@@ -1074,6 +1145,9 @@
 
     const internal = target.closest('a[href^="#/"]');
     if (!target.closest("#join-menu") || internal) showJoin(false);
+    header.querySelectorAll(".account-menu[open]").forEach((menu) => {
+      if (!menu.contains(target)) menu.open = false;
+    });
     if (internal && internal.getAttribute("href") === location.hash && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
       event.preventDefault();
       renderLocation();
@@ -1086,6 +1160,12 @@
 
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape" || dialog.open) return;
+    const account = header.querySelector(".account-menu[open]");
+    if (account) {
+      account.open = false;
+      account.querySelector("summary").focus();
+      return;
+    }
     const menu = header.querySelector('[data-action="join-menu"]');
     if (menu.getAttribute("aria-expanded") === "true") {
       showJoin(false);
@@ -1170,4 +1250,11 @@
   window.addEventListener("hashchange", renderLocation);
   mountFooter();
   renderLocation();
+  refreshSession();
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted && authBase) {
+      updateAccount(null);
+      refreshSession();
+    }
+  });
 })();

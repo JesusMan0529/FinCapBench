@@ -81,6 +81,10 @@ h3 { font-size: 1.13rem; }
 .header-actions .icon-button:hover { color: white; background: #ffffff1f; }
 .login-link { border: 0; color: #fff0ef; padding: 8px 2px; background: transparent; white-space: nowrap; }
 .login-link:hover { color: white; }
+.account-menu { position: relative; }
+.account-menu summary { display: flex; align-items: center; gap: 4px; max-width: 13em; list-style: none; }
+.account-menu summary::-webkit-details-marker { display: none; }
+.account-menu summary span { overflow: hidden; text-overflow: ellipsis; }
 .menu-toggle { display: none !important; }
 .join-menu { position: relative; }
 .join-options {
@@ -88,8 +92,9 @@ h3 { font-size: 1.13rem; }
   padding: 6px; border: 1px solid var(--line); border-radius: 14px; background: white; color: var(--ink); box-shadow: var(--shadow);
 }
 .join-options::before { content: ""; position: absolute; inset: -10px 0 auto; height: 10px; }
-.join-options a { display: block; padding: 9px 12px; border-radius: 8px; white-space: nowrap; font-size: .9rem; }
-.join-options a:hover, .join-options a:focus-visible { background: var(--wash); color: var(--red); }
+.join-options :is(a, button) { display: block; padding: 9px 12px; border-radius: 8px; white-space: nowrap; font-size: .9rem; }
+.join-options button { width: 100%; border: 0; color: inherit; background: white; text-align: left; }
+.join-options :is(a, button):hover, .join-options :is(a, button):focus-visible { background: var(--wash); color: var(--red); }
 .button, .icon-button {
   display: inline-flex; align-items: center; justify-content: center; gap: 9px;
   border: 1px solid transparent; border-radius: 10px; min-height: 45px; padding: 9px 16px;
@@ -352,6 +357,8 @@ dialog .inline-actions { margin-top: 16px; }
   .header-actions .icon-button { min-width: 31px; padding-inline: 4px; }
   .header-actions .button-compact { min-height: 34px; padding-inline: 7px; font-size: .77rem; }
   .login-link { font-size: .8rem; }
+  .header-actions:has(.account-menu) .compass-link { display: none; }
+  .header-account .account-menu summary { max-width: 7em; }
   .nav.is-open { grid-template-columns: repeat(2, 1fr); }
   .wrap { width: calc(100% - 30px); }
   .hero { min-height: 520px; }
@@ -378,11 +385,12 @@ dialog .inline-actions { margin-top: 16px; }
 }
 @media (max-width: 379px) {
   .header-inner { column-gap: 7px; }
-  .header-actions :is(.login-link, .compass-link) { display: none; }
+  .header-actions :is(.header-account, .compass-link) { display: none; }
   .nav .mobile-utility {
     display: inline-flex; align-items: center; min-height: 40px; padding: 7px 9px;
     border: 0; border-radius: 7px; background: #ffffff0c; color: #fff0ef;
     text-align: left; font-size: .9rem; font-weight: 600;
   }
+  .nav [data-account] > * { width: 100%; }
   .filter-period { width: 100%; }
 }

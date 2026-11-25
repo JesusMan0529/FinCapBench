@@ -20,7 +20,7 @@ python -m http.server 8000 --directory dist
 | 文档 | 用目录定位说明，复制提示词和命令，展开常见问题 |
 | CNFinPayBench | 浏览六类支付能力及分项排行，检查并预览参评申请 |
 | 智能体竞技场 | 选择金融案例，对比两份预置回答，投票和重置 |
-| 登录与加入评测 | 打开参评表单或参考平台入口 |
+| 登录与加入评测 | 查看学校认证接入状态，打开参评表单 |
 
 申请表在浏览器内校验并显示预览。竞技场用预置回答展示交互。点赞和本机浏览次数使用浏览器存储。
 
@@ -38,3 +38,15 @@ python -m http.server 8000 --directory dist
 > Create a cinematic ultra-wide website hero background for a university financial model evaluation platform, with absolutely no text, numbers, labels, logos, watermark or UI. An original photorealistic studio render of several fine translucent crimson glass sheets and a flowing market-data surface, like bent precision-machined glass fins illuminated from within by delicate ruby and warm coral highlights. Viewed in three-quarter perspective, the glass architecture rises across the right side, with an elegant sweeping arc of fine threads and layered reflections. Deep burgundy and oxblood palette, soft dark maroon shadows, natural bloom, controlled high contrast, finely detailed editorial graphic. Leave the left 46 percent quiet, very dark and clear for white header text. Keep all intense light to the far right, have the artwork fade seamlessly into near-black burgundy on the far left and near the boundaries. Widescreen landscape 1536x1024 or 16:9, physically plausible glass and directional lighting, no globe, no planet, no stock tickers, no blue, no purple.
 
 </details>
+
+## 西安交大统一认证接入
+
+线上 GitHub Pages 提供静态页面。学校开通认证后，在和认证服务同源的 HTTPS 部署中于 HTML 的头部声明 `<meta name="cnfinbench-auth" content="enabled">`，并提供下列接口。接口相对于站点入口目录。
+
+| 接口 | 行为 |
+| --- | --- |
+| `GET api/auth/login?returnTo=...` | 记录站内返回路由，跳转到学校批准的登录地址。回调在服务端校验票据或授权码并建立会话，然后返回原路由。 |
+| `GET api/auth/session` | 有效会话返回 `200` 与 `{"studentId":"学号"}`。匿名会话返回 `401`。学号字段来自学校验证成功后的身份信息。 |
+| `POST api/auth/logout` | 校验请求来源，销毁本站服务端会话并清理会话 Cookie，返回 `204`。 |
+
+服务端固定登记的回调地址和本站来源，校验返回路由为本站路由片段。会话使用 HttpOnly、Secure、SameSite Cookie，认证响应避免缓存。用户凭据在学校登录页面验证。学校网络信息中心提供应用备案、审批与对接文档。 [官方接入说明](https://nic.xjtu.edu.cn/wlfw/wlfw/tysfrzxtjr.htm)
