@@ -2,7 +2,6 @@
 window.BenchContent = {
   email: "1638272030@stu.xjtu.edu.cn",
   reference: "https://cnfinbench.opencompass.org.cn",
-  upstream: "https://github.com/open-compass/CNFinBench",
   paper: "https://arxiv.org/abs/2512.09506",
   doi: "https://doi.org/10.1145/3770855.3817482",
   citation: `@inproceedings{ding2026kdd,
