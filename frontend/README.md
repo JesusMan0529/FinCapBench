@@ -1,6 +1,6 @@
 # XJTUSE CNFinBench 前端
 
-红白配色的金融评测前端。打开 [dist/index.html](dist/index.html) 即可浏览，HTML、CSS、JavaScript、快照数据和图片均随源码提供。
+打开 [dist/index.html](dist/index.html) 即可浏览，HTML、CSS、JavaScript、快照数据和图片均随源码提供。
 
 若需以 HTTP 运行，在本目录执行：
 
