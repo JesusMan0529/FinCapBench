@@ -45,13 +45,12 @@
   const external = (url, text, css = "text-link") => `<a href="${escape(url)}" class="${css}" target="_blank" rel="noopener noreferrer">${text}</a>`;
   const copyButton = (id, title) => `<button type="button" class="icon-button" data-copy="${id}" aria-label="${title}" title="${title}">${glyph("copy")}</button>`;
   const refLink = (page, title = "查看参考站", css) => external(content.reference + page, title, css);
-  const heading = (title, subtitle = "") => `<div class="page-heading"><h1>${title}</h1>${subtitle ? `<p>${subtitle}</p>` : ""}</div>`;
+  const heading = (title) => `<div class="page-heading"><h1>${title}</h1></div>`;
   const codeBox = (id, code, format = "JSON", label = "复制代码") => `
     <div class="code-box"><div class="code-toolbar"><span>${format}</span>${copyButton(id, label)}</div>
       <pre><code id="${id}">${escape(code)}</code></pre>
     </div>`;
   const tags = (items) => `<div class="tags">${items.map((item) => `<span class="tag">${escape(item)}</span>`).join("")}</div>`;
-  const note = (body) => `<div class="note">${body}</div>`;
 
   let activePage = "";
   let toastTimer;
@@ -414,7 +413,6 @@
         <div class="wrap hero-inner">
           <p class="hero-kicker">金融大模型与智能体评测</p>
           <h1 id="hero-title">CNFinBench</h1>
-          <p class="hero-intro">从金融知识、证据推理到智能体实际执行，查看模型在专业金融场景中的评测表现，了解每项分数背后的任务。</p>
           <div class="hero-actions">
             <a class="button button-light" href="#/evaluation-list">查看评测榜单</a>
             <a class="button button-glass" href="#/dataset/llm">浏览评测数据集</a>
@@ -423,21 +421,21 @@
       </section>
       <section class="section">
         <div class="wrap">
-          <div class="section-heading"><div><h2>大语言模型评测</h2><p>选择一个维度，查看考察内容与对应数据集。</p></div>
+          <div class="section-heading"><h2>大语言模型评测</h2>
             <a class="text-link" href="#/evaluation-list/LLMLeaderboard">查看大语言模型榜单</a></div>
           ${taxonomy("llm")}
         </div>
       </section>
       <section class="section section-wash">
         <div class="wrap">
-          <div class="section-heading"><div><h2>智能体评测</h2><p>按金融长程任务观察工具使用、证据处理和结果交付。</p></div>
+          <div class="section-heading"><h2>智能体评测</h2>
             <a class="text-link" href="#/evaluation-list/AgentLeaderboard">查看智能体榜单</a></div>
           ${taxonomy("agent")}
         </div>
       </section>
       <section class="section-tight">
         <div class="wrap local-summary reveal-target">
-          <div><h2>FinCapBench v1.0</h2><p>浏览交付项目中的能力目录、输入输出字段和评分指标。</p><a class="text-link" href="#/dataset/local">查看 FinCapBench 数据集</a></div>
+          <div><h2>FinCapBench v1.0</h2><a class="text-link" href="#/dataset/local">查看 FinCapBench 数据集</a></div>
           <div class="stats">
             <div class="stat"><strong>${data.local.tasks.length}</strong><span>能力方向</span></div>
             <div class="stat"><strong>${content.localGroups.length}</strong><span>能力分组</span></div>
@@ -482,9 +480,8 @@
 
   function overview() {
     return `<div class="wrap page">
-      ${heading("评测榜单", "浏览金融大语言模型与智能体的综合和分项表现。")}
+      ${heading("评测榜单")}
       <div class="table-grid">${tableOverview("llm")}${tableOverview("agent")}</div>
-      <p class="note">参考站公开数据快照 · ${data.captured}　${refLink("/evaluation-list", "查看最新榜单")}</p>
     </div>`;
   }
 
@@ -496,7 +493,7 @@
     };
     return `<div class="wrap page">
       <div class="breadcrumb"><a href="#/evaluation-list">评测榜单</a> / ${historic ? "历史榜单" : labels[group]}</div>
-      ${heading(historic ? "历史榜单" : labels[group] + "评测榜单", "可按来源筛选，并按综合得分或分项得分排序。")}
+      ${heading(historic ? "历史榜单" : labels[group] + "评测榜单")}
       <div class="results-bar">
         <nav class="tabs" aria-label="榜单类别">
           ${["llm", "agent"].map((type) => `<a href="${leaderRoute(type, historic)}"${activeLink(type === group)}>${labels[type]}</a>`).join("")}
@@ -512,14 +509,12 @@
       </div>
       <div class="results-bar">
         ${rankingFilters()}
-        <p class="small muted">参考榜单更新于 ${escape(rankingState.board.updated.slice(0, 10))}</p>
       </div>
       ${rankingState.board.dimensions.length ? `<div class="tabs tabs-panel" aria-label="得分维度">
         <button type="button" data-action="dimension" data-dimension="" aria-pressed="true">综合</button>
         ${rankingState.board.dimensions.map((dimension) => `<button type="button" data-action="dimension" data-dimension="${dimension.id}" aria-pressed="false">${escape(dimension.name)}</button>`).join("")}
       </div>` : ""}
       <div id="ranking-results">${rankingResults()}</div>
-      <p class="note">榜单为 ${data.captured} 采集的公开快照。参数量或分数缺失时显示 N/A。${refLink("/evaluation-list", "查看参考榜单")}</p>
     </div>`;
   }
 
@@ -612,7 +607,7 @@
       groups, query: "", type, group: groups.some(({ id }) => id === preselected) ? preselected : "",
     };
     return `<div class="wrap page">
-      ${heading("评测数据集", "查阅评测任务、数据字段和输入示例。")}
+      ${heading("评测数据集")}
       <nav class="tabs tabs-panel" aria-label="数据集类别">
         ${Object.entries(labels).map(([key, label]) => `<a href="#/dataset/${key}"${activeLink(type === key)}>${label}</a>`).join("")}
       </nav>
@@ -626,8 +621,6 @@
         <span id="dataset-count" class="small muted" role="status"></span>
       </div>
       <div id="dataset-results"></div>
-      <p class="note">${type === "local" ? "项目交付目录提供能力规格和记录数。这里可以下载浏览器演示样例。"
-        : `目录元数据取自参考站公开快照 · ${data.captured}。${refLink(type === "llm" ? "/dataset/llm" : "/dataset/agent", "查看参考目录")}`}</p>
     </div>`;
   }
 
@@ -691,7 +684,7 @@
     return `<div class="page-hero">
         <div class="wrap detail-heading">
           <div class="breadcrumb"><a href="#/dataset/${key}">评测数据集</a> / ${escape(labels[key])}</div>
-          ${heading(escape(item.name), escape(item.code || `FinCapBench · ${item.id}`))}
+          ${heading(escape(item.name))}
           <div class="activity-row">
             <button class="icon-button" data-action="dataset-like" data-id="${id}" aria-pressed="${liked}" aria-label="数据集点赞" title="在此浏览器点赞">${glyph("heart")} <span>${(item.likes || 0) + Number(liked)}</span></button>
             <span class="small muted" title="参考快照与此浏览器浏览次数">${glyph("eye")} ${number((item.views || 0) + views)}</span>
@@ -709,8 +702,7 @@
           </section>
           <section id="metadata" data-spy><h2>元数据</h2>${codeBox("dataset-metadata", JSON.stringify(metadata, null, 2), "JSON", "复制元数据")}</section>
           <section id="example" data-spy><h2>示例</h2>
-            <p class="note">输入预览使用自编示例，用于理解字段和任务要求。</p>
-            ${codeBox("dataset-example", JSON.stringify(sample, null, 2), "JSON", "复制示例")}
+            ${codeBox("dataset-example", JSON.stringify(sample, null, 2), "自编示例 · JSON", "复制示例")}
             <div class="inline-actions detail-actions"><button type="button" class="button button-outline" data-action="download-example" data-id="${id}">下载示例</button></div>
           </section>
         </article>
@@ -755,7 +747,7 @@
       </div>`,
       contact: contactCard(),
     };
-    return `<div class="page-hero"><div class="wrap">${heading("文档", "了解评测流程、指标和提交方式。")}</div></div>
+    return `<div class="page-hero"><div class="wrap">${heading("文档")}</div></div>
       <div class="wrap page article-grid">
         ${toc("#/docs", docsEntries, "文档目录")}
         <article class="article-body">${docsEntries.map(([key, title]) =>
@@ -765,12 +757,11 @@
 
   function paybench() {
     return `<section class="mast-pay"><div class="wrap">
-      ${heading("CNFinPayBench", "金融支付专项评测，覆盖从知识理解到业务执行的六项能力。")}
-      ${tags(["支付规则", "清结算", "风险与合规", "工具协同"])}
+      ${heading("CNFinPayBench")}
       <a class="button button-light" href="#/paybench/submission">加入评测</a>
     </div></section>
     <div class="wrap page">
-      <div class="section-heading"><div><h2>评测维度</h2><p>打开任一维度查看任务范围与分项榜单。</p></div></div>
+      <div class="section-heading"><h2>评测维度</h2></div>
       <div class="card-grid">
         ${data.pay.map(({ id, name, code, keywords }, index) => `
           <a class="card reveal-target" href="#/paybench/${id}">
@@ -779,7 +770,6 @@
             <span class="card-foot">查看更多</span>
           </a>`).join("")}
       </div>
-      <p class="note">参考基准建设单位 · ${data.payUnits.map(escape).join("、")}　${refLink("/paybench", "参考页面")}</p>
     </div>`;
   }
 
@@ -792,8 +782,7 @@
     };
     return `<div class="page-hero"><div class="wrap detail-heading">
       <div class="breadcrumb"><a href="#/paybench">CNFinPayBench</a> / 维度详情</div>
-      ${heading(escape(part.name), escape(part.code))}
-      ${tags(part.keywords)}
+      ${heading(escape(part.name))}
     </div></div>
     <div class="wrap page article-grid">
       <aside class="detail-rail">
@@ -810,7 +799,7 @@
           <p>${refLink(`/paybench/${id}`, "查看参考基准的细分任务说明")}</p>
         </section>
         <section id="ranking" data-spy>
-          <div class="section-heading"><div><h2>排行榜</h2><p>公开快照 · ${data.captured}</p></div>
+          <div class="section-heading"><h2>排行榜</h2>
             <a class="button button-primary button-compact" href="#/paybench/submission">加入评测</a></div>
           ${rankingFilters()}
           <div id="ranking-results" class="pay-results">${rankingResults()}</div>
@@ -840,7 +829,6 @@
     return `<div class="wrap page">
       <div class="breadcrumb"><a href="${isPay ? "#/paybench" : "#/evaluation-list"}">${isPay ? "CNFinPayBench" : "评测榜单"}</a> / 加入评测</div>
       ${heading(`${name}评测申请`)}
-      <p class="note form-note">前端演示。填表后可核对申请内容，资料仅在当前页面显示。</p>
       <div class="surface surface-pad">
         <form id="application-form" data-type="${type}">
           <div class="form-grid">
@@ -871,16 +859,15 @@
 
   function arena() {
     const cases = content.arenaCases;
-    return `<div class="page-hero"><div class="wrap">${heading("智能体竞技场", "选择金融场景，比较两个智能体的任务产物。")}</div></div>
+    return `<div class="page-hero"><div class="wrap">${heading("智能体竞技场")}</div></div>
       <div class="wrap page">
-        <p class="note">前端演示使用预置回答。${refLink("/arena", "打开参考站竞技场")}</p>
         <div class="surface surface-pad" id="arena-demo">
           <div class="form-grid">
             <label class="form-field">评测场景 <select id="arena-case">
               ${cases.map(({ title }, unt) => `<option value="${unt}">${title}</option>`).join("")}
             </select></label>
             <div class="inline-actions arena-controls">
-              <button type="button" class="button button-primary" data-action="arena-start">开始对比</button>
+              <button type="button" class="button button-primary" data-action="arena-start">演示对比</button>
               <button type="button" class="button button-outline" data-action="arena-reset">重置</button>
             </div>
           </div>
@@ -935,7 +922,7 @@
   }
 
   function missingPage() {
-    return `<div class="wrap page">${heading("页面未找到", "请通过导航打开评测页面。")}
+    return `<div class="wrap page">${heading("页面未找到")}
       <a class="button button-primary" href="#/home">返回首页</a></div>`;
   }
 
