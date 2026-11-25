@@ -10,10 +10,11 @@
   const toast = document.querySelector("#toast");
   const topButton = document.querySelector(".back-to-top");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const authEnabled = document.querySelector('meta[name="cnfinbench-auth"]')?.content === "enabled";
+  const projectName = "FinCapBench";
+  const authEnabled = document.querySelector('meta[name="fincapbench-auth"]')?.content === "enabled";
   const authBase = authEnabled && ["https:", "http:"].includes(location.protocol) ? new URL("api/auth/", document.baseURI) : null;
   const authOptions = { credentials: "same-origin", mode: "same-origin", cache: "no-store", redirect: "error" };
-  const repository = "https://github.com/JesusMan0529/CNFinBench";
+  const repository = "https://github.com/JesusMan0529/FinCapBench";
   const labels = { llm: "大语言模型", agent: "智能体", local: "FinCapBench v1.0" };
   const navItems = [
     ["home", "首页"],
@@ -202,9 +203,9 @@
   function mountHeader(section) {
     const activeSection = { "dataset-detail": "dataset", oldList: "evaluation-list", join: "evaluation-list" }[section] || section;
     header.innerHTML = `<div class="wrap header-inner">
-      <a class="brand" href="#/home" aria-label="XJTUSE CNFinBench 首页">
+      <a class="brand" href="#/home" aria-label="XJTUSE ${projectName} 首页">
         <img class="brand-seal" src="assets/xjtu-seal.png" width="43" height="43" alt="">
-        <span class="brand-type"><small>XJTUSE</small><strong>CNFinBench</strong></span>
+        <span class="brand-type"><small>XJTUSE</small><strong>${projectName}</strong></span>
       </a>
       <nav class="nav" id="navigation" aria-label="主导航">
         ${navItems.map(([key, label, suffix = ""]) => `
@@ -249,7 +250,7 @@
       ${external("https://www.xjtu.edu.cn/", '<img src="assets/xjtu-lockup.png" alt="西安交通大学" width="695" height="186">', "school-lockup")}
       </div>
       <div class="wrap footer-inner">
-        <span>XJTUSE · CNFinBench</span>
+        <span>XJTUSE · ${projectName}</span>
         <nav class="footer-links" aria-label="页脚导航">
           <a href="#/home/contact">联系方式</a>
           ${external("https://opencompass.org.cn/policy", "平台服务协议", "")}
@@ -412,7 +413,7 @@
         <button type="button" class="button button-glass button-compact motion-toggle" aria-controls="hero-motion" hidden>暂停动效</button>
         <div class="wrap hero-inner">
           <p class="hero-kicker">金融大模型与智能体评测</p>
-          <h1 id="hero-title">CNFinBench</h1>
+          <h1 id="hero-title">${projectName}</h1>
           <div class="hero-actions">
             <a class="button button-light" href="#/evaluation-list">查看评测榜单</a>
             <a class="button button-glass" href="#/dataset/llm">浏览评测数据集</a>
@@ -445,7 +446,7 @@
       </section>
       <section class="section-tight section-wash" id="paper">
         <div class="wrap split reveal-target">
-          <div><h2>论文与引用</h2><p>Beyond Knowledge to Agency: Evaluating Expertise, Autonomy, and Integrity in Finance with CNFinBench</p>
+          <div><h2>论文与引用</h2><p>Beyond Knowledge to Agency</p>
             ${external(content.paper, "阅读论文")} · ${external(content.doi, "KDD 2026 发表版本")}</div>
           ${codeBox("citation", content.citation, "BibTeX", "复制 BibTeX")}
         </div>
@@ -724,9 +725,9 @@
       "  --model-config configs/models/my_model.yaml --split core --limit 10",
     ].join("\n");
     const sections = {
-      intro: `<p>CNFinBench 的公开评测包括大语言模型与智能体两条路线。前者关注金融知识、推理、合规和安全，后者关注执行长程任务和交付业务产物。</p>
+      intro: `<p>${projectName} 提供大语言模型与智能体两类公开评测结果。前者关注金融知识、推理、合规和安全，后者关注执行长程任务和交付业务产物。</p>
         <p>本站同时提供交付项目 FinCapBench v1.0 的十八个能力方向与评分契约。不同基准的分数采用各自定义。</p>
-        <p>${external(repository, "CNFinBench 项目")} · ${external(content.doi, "评测论文")}</p>`,
+        <p>${external(repository, projectName + " 项目")} · ${external(content.doi, "评测论文")}</p>`,
       prompts: `<p>每个任务使用匹配其输入和输出格式的提示。需要用证据作答时，保留材料出处及相应时间范围。</p>${codeBox("doc-prompt", prompt, "文本示例")}`,
       metrics: `<p>常见指标包括准确率、F1 和基于规则或评审模型的评分。智能体任务还检查证据、工具参数和产物是否符合约定。</p>
         <p><a class="text-link" href="#/dataset/local">查看 18 项 FinCapBench 指标</a></p>`,
@@ -987,7 +988,7 @@
       stopHeroMotion = page === "home" ? mountHeroMotion() : undefined;
       if (isDataset) updateCatalog();
       const title = main.querySelector("h1")?.textContent;
-      document.title = title && title !== "CNFinBench" ? `${title} | CNFinBench · XJTUSE` : "CNFinBench | XJTUSE";
+      document.title = title && title !== projectName ? `${title} | ${projectName} · XJTUSE` : `${projectName} | XJTUSE`;
       if (hadPage) main.focus({ preventScroll: true });
       revealPage();
       scrollSpy = main.querySelectorAll("[data-spy]");

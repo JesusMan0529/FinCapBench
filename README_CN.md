@@ -1,6 +1,12 @@
+# FinCapBench
+
+[在线页面](https://jesusman0529.github.io/FinCapBench/) · [前端源码与使用说明](frontend/README.md) · [English](README.md)
+
+<details>
+<summary>上游项目说明</summary>
+
 # CNFinBench: 评估金融领域的专业知识、自主性和完整性
 
-XJTUSE 前端源码和本地预览方式见 [frontend/README.md](frontend/README.md)。
 
 [![Paper](https://img.shields.io/badge/Paper-arXiv-red)](https://arxiv.org/abs/2512.09506)
 [![Leaderboard](https://img.shields.io/badge/Leaderboard-OpenCompass-blue)](https://cnfinbench.opencompass.org.cn/home)
@@ -222,3 +228,5 @@ CNFinBench 部署在基于 **OpenCompass** 构建的**全自动评估平台**上
 </div>
 
 ---
+
+</details>

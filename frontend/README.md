@@ -1,4 +1,6 @@
-# XJTUSE CNFinBench 前端
+# XJTUSE FinCapBench 前端
+
+[在线页面](https://jesusman0529.github.io/FinCapBench/) · [GitHub 仓库](https://github.com/JesusMan0529/FinCapBench)
 
 打开 [dist/index.html](dist/index.html) 即可浏览，HTML、CSS、JavaScript、快照数据和图片均随源码提供。
 
@@ -26,9 +28,9 @@ python -m http.server 8000 --directory dist
 
 ## 数据及来源
 
-- 榜单、期次、评测类别和数据集元数据取自 CNFinBench 参考站，采集于 2026 年 11 月 25 日。正式成绩和最新发布以参考站为准。主页与榜单的“查看参考站”链接可直接查阅。 [CNFinBench 参考站](https://cnfinbench.opencompass.org.cn/home)
+- 榜单、期次、评测类别和数据集元数据取自 OpenCompass 公开评测，采集于 2026 年 11 月 25 日。 [上游评测站](https://cnfinbench.opencompass.org.cn/home)
 - FinCapBench v1.0 的任务名称与主指标来自交付目录的任务注册表，记录数来自数据清单，字段来自各能力的 Schema，核心集记录数来自冒烟检查报告。打包内容使用汇总与字段定义，所有可下载题例均为演示文本。
-- 数据集名称沿用参考目录。任务介绍按名称重新撰写，详情附参考链接。 [CNFinBench 公开数据集](https://cnfinbench.opencompass.org.cn/dataset/llm)
+- 数据集名称沿用参考目录。任务介绍按名称重新撰写，详情附参考链接。 [上游公开数据集](https://cnfinbench.opencompass.org.cn/dataset/llm)
 - 论文引用保留原作者及出版信息。 [上游 GitHub](https://github.com/open-compass/CNFinBench) · [KDD 2026 论文](https://doi.org/10.1145/3770855.3817482)
 - 校徽与校名标识由用户提供，在网页中呈现为白色透明样式。首屏背景由内置 ImageGen 生成，位置在 [dist/assets/hero.webp](dist/assets/hero.webp)。
 
@@ -41,7 +43,7 @@ python -m http.server 8000 --directory dist
 
 ## 西安交大统一认证接入
 
-线上 GitHub Pages 提供静态页面。学校开通认证后，在和认证服务同源的 HTTPS 部署中于 HTML 的头部声明 `<meta name="cnfinbench-auth" content="enabled">`，并提供下列接口。接口相对于站点入口目录。
+线上 GitHub Pages 提供静态页面。学校开通认证后，在和认证服务同源的 HTTPS 部署中于 HTML 的头部声明 `<meta name="fincapbench-auth" content="enabled">`，并提供下列接口。接口相对于站点入口目录。
 
 | 接口 | 行为 |
 | --- | --- |

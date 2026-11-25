@@ -1,6 +1,12 @@
+# FinCapBench
+
+[Live site](https://jesusman0529.github.io/FinCapBench/) · [Frontend source and setup](frontend/README.md) · [中文](README_CN.md)
+
+<details>
+<summary>Upstream project documentation</summary>
+
 #  CNFinBench: Evaluating Expertise, Autonomy, and Integrity in Finance
 
-XJTUSE frontend source and local preview: [frontend/README.md](frontend/README.md).
 
 **Language**: [English](README.md) | [中文](README_CN.md)。
 
@@ -222,3 +228,5 @@ Thanks to all our amazing contributors who make this project possible! 🎉
 </div>
 
 ---
+
+</details>
