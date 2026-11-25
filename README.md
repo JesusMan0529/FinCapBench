@@ -1,5 +1,7 @@
 #  CNFinBench: Evaluating Expertise, Autonomy, and Integrity in Finance
 
+XJTUSE frontend source and local preview: [frontend/README.md](frontend/README.md).
+
 **Language**: [English](README.md) | [中文](README_CN.md)。
 
 [![Paper](https://img.shields.io/badge/Paper-arXiv-red)](https://arxiv.org/abs/2512.09506)

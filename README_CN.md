@@ -1,5 +1,7 @@
 # CNFinBench: 评估金融领域的专业知识、自主性和完整性
 
+XJTUSE 前端源码和本地预览方式见 [frontend/README.md](frontend/README.md)。
+
 [![Paper](https://img.shields.io/badge/Paper-arXiv-red)](https://arxiv.org/abs/2512.09506)
 [![Leaderboard](https://img.shields.io/badge/Leaderboard-OpenCompass-blue)](https://cnfinbench.opencompass.org.cn/home)
 
