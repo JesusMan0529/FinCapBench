@@ -444,13 +444,6 @@
           </div>
         </div>
       </section>
-      <section class="section-tight section-wash" id="paper">
-        <div class="wrap split reveal-target">
-          <div><h2>论文与引用</h2><p>Beyond Knowledge to Agency</p>
-            ${external(content.paper, "阅读论文")} · ${external(content.doi, "KDD 2026 发表版本")}</div>
-          ${codeBox("citation", content.citation, "BibTeX", "复制 BibTeX")}
-        </div>
-      </section>
       <section class="section-tight" id="contact">
         <div class="wrap split reveal-target"><h2>联系方式</h2>${contactCard()}</div>
       </section>`;
